@@ -2,7 +2,6 @@ import jwt from 'jsonwebtoken'
 import { cookies } from 'next/headers'
 import { dbConnect } from './db'
 import { User } from '@/models/User'
-import { ensureDefaultUser as seedDefaultUser } from './seed'
 
 // Prefer environment-provided secret; fall back for dev only
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-me'
@@ -22,7 +21,7 @@ export function verifyJwt(token: string): JwtPayload | null {
   }
 }
 
-export async function ensureDefaultUser() { await seedDefaultUser() }
+// Default-user seeding removed; users must exist in DB already.
 
 export async function signIn(username: string, password: string) {
   await dbConnect()

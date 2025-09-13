@@ -1,6 +1,4 @@
-import { ensureDefaultUser } from '@/lib/seed'
-
-// Called once in the app root to ensure default user exists when env vars are set.
+// No-op init: default user seeding removed (user is managed manually in DB)
 export async function initApp() {
-  await ensureDefaultUser()
+  return
 }

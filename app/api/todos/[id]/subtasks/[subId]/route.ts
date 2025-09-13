@@ -4,7 +4,9 @@ import { getUserFromCookies } from '@/lib/auth'
 import { Todo } from '@/models/Todo'
 import { History } from '@/models/History'
 
-export async function POST(_: Request, { params }: { params: { id: string; subId: string } }) {
+export const runtime = 'nodejs'
+
+export async function POST(_: Request, { params }: any) {
   const user = await getUserFromCookies()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   await dbConnect()
@@ -18,7 +20,7 @@ export async function POST(_: Request, { params }: { params: { id: string; subId
   return NextResponse.json({ todo })
 }
 
-export async function DELETE(_: Request, { params }: { params: { id: string; subId: string } }) {
+export async function DELETE(_: Request, { params }: any) {
   const user = await getUserFromCookies()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   await dbConnect()

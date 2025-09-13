@@ -1,14 +1,12 @@
 import { NextResponse } from 'next/server'
 import { dbConnect } from '@/lib/db'
 import { getUserFromCookies } from '@/lib/auth'
-import { ensureDefaultUser } from '@/lib/seed'
 import { Todo } from '@/models/Todo'
 import { History } from '@/models/History'
 
 export const runtime = 'nodejs'
 
 export async function GET() {
-  await ensureDefaultUser()
   const user = await getUserFromCookies()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   await dbConnect()
@@ -17,7 +15,6 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  await ensureDefaultUser()
   const user = await getUserFromCookies()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   await dbConnect()
