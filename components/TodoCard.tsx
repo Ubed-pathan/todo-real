@@ -83,9 +83,9 @@ export function TodoCard({ todo }: { todo: Todo }) {
             onDelete={() => void deleteSubTask(todo.id, sub.id)}
           />
         ))}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap w-full">
           <input
-            className="flex-1 rounded-lg px-3 py-2 outline-none border 
+            className="flex-1 min-w-0 rounded-lg px-3 py-2 outline-none border 
             bg-white text-neutral-900 placeholder:text-neutral-500 border-black/10 
             dark:bg-white/5 dark:text-white dark:placeholder:text-white/50 dark:border-white/10"
             placeholder="Add subtask"
@@ -98,7 +98,7 @@ export function TodoCard({ todo }: { todo: Todo }) {
               }
             }}
           />
-          <button className="px-3 py-2 rounded-lg bg-white/10 border border-white/10" onClick={addSub}>Add</button>
+          <button className="px-3 py-2 rounded-lg bg-white/10 border border-white/10 shrink-0 w-full sm:w-auto" onClick={addSub}>Add</button>
         </div>
       </div>
 
