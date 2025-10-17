@@ -7,6 +7,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const hideChrome = pathname?.startsWith('/signin')
 
+  
   return (
     <div className={`min-h-dvh grid gap-4 p-4 ${hideChrome ? 'grid-cols-1' : 'grid-cols-1 2xl:grid-cols-[280px_1fr]'}`}>
       {!hideChrome && (
