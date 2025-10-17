@@ -60,7 +60,7 @@ export function TodoCard({ todo }: { todo: Todo }) {
           />
           <div className="text-xs opacity-60">Created {created}</div>
         </div>
-  <button onClick={() => void deleteTodo(todo.id)} className="text-xs opacity-60 hover:opacity-100" aria-label="Delete todo">Delete</button>
+  <button type="button" onClick={(e) => { e.stopPropagation(); void deleteTodo(todo.id) }} className="text-xs opacity-60 hover:opacity-100" aria-label="Delete todo">Delete</button>
       </div>
 
       <textarea
