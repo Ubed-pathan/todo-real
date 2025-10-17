@@ -6,7 +6,8 @@ import { History } from '@/models/History'
 
 export const runtime = 'nodejs'
 
-export async function PATCH(req: Request, { params }: any) {
+export async function PATCH(req: Request, ctx: any) {
+  const params = await ctx?.params
   const user = await getUserFromCookies()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   await dbConnect()
@@ -17,7 +18,8 @@ export async function PATCH(req: Request, { params }: any) {
   return NextResponse.json({ todo })
 }
 
-export async function DELETE(_: Request, { params }: any) {
+export async function DELETE(_: Request, ctx: any) {
+  const params = await ctx?.params
   const user = await getUserFromCookies()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   await dbConnect()

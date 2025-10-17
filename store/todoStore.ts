@@ -1,6 +1,6 @@
 "use client"
 import { create } from 'zustand'
-import { addDays, isSameDay, startOfWeek } from 'date-fns'
+import { addDays, isSameDay, startOfWeek, startOfMonth, endOfMonth, isWithinInterval } from 'date-fns'
 import { api } from '@/lib/axios'
 import { type Todo, type SubTask, type HistoryItem } from '@/lib/types'
 
@@ -27,6 +27,9 @@ export type TodoStore = State & Actions & {
   progressForThisWeek: () => { labels: string[]; values: number[]; completedCounts: number[]; totalCounts: number[] }
   completedVsPending: () => { completed: number; pending: number }
   filterHistoryByDate: (from: Date, to: Date) => HistoryItem[]
+  overallProgress: () => { completed: number; total: number; percent: number }
+  weeklySummary: () => { completedThisWeek: number; totalTodos: number; avgPercent: number }
+  monthlySummary: () => { completedThisMonth: number; createdThisMonth: number }
 }
 
 const uid = () => Math.random().toString(36).slice(2)
@@ -110,5 +113,36 @@ export const useTodoStore = create<TodoStore>()((set, get) => ({
 
       filterHistoryByDate: (_from, _to) => {
         return []
+      },
+
+      // Overall snapshot regardless of creation date
+      overallProgress: () => {
+        const total = get().todos.length
+        const completed = get().todos.filter(t => t.completedAt).length
+        const percent = total ? Math.round((completed / total) * 100) : 0
+        return { completed, total, percent }
+      },
+
+      // Weekly summary based on completedAt timestamps within current week
+      weeklySummary: () => {
+        const now = new Date()
+        const start = startOfWeek(now, { weekStartsOn: 1 })
+        const end = addDays(start, 7)
+        const todos = get().todos
+        const completedThisWeek = todos.filter(t => t.completedAt && isWithinInterval(new Date(t.completedAt), { start, end })).length
+        const totalTodos = todos.length
+        const avgPercent = totalTodos ? Math.round((completedThisWeek / totalTodos) * 100) : 0
+        return { completedThisWeek, totalTodos, avgPercent }
+      },
+
+      // Monthly summary (calendar month) for quick high-level stat
+      monthlySummary: () => {
+        const now = new Date()
+        const start = startOfMonth(now)
+        const end = endOfMonth(now)
+        const todos = get().todos
+        const completedThisMonth = todos.filter(t => t.completedAt && isWithinInterval(new Date(t.completedAt), { start, end })).length
+        const createdThisMonth = todos.filter(t => isWithinInterval(new Date(t.createdAt), { start, end })).length
+        return { completedThisMonth, createdThisMonth }
       },
 }))

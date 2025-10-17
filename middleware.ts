@@ -1,10 +1,18 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-const PUBLIC_PATHS = ['/signin', '/_next', '/favicon.ico', '/api/auth/signin']
+const PUBLIC_PATHS = [
+  '/signin',
+  '/_next',
+  '/favicon.ico',
+  '/icon.svg',
+  '/manifest.webmanifest',
+  '/api/auth/signin',
+]
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
+  // Bypass auth for public assets and routes
   if (PUBLIC_PATHS.some(p => pathname.startsWith(p))) {
     return NextResponse.next()
   }

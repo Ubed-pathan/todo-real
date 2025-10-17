@@ -8,9 +8,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const hideChrome = pathname?.startsWith('/signin')
 
   return (
-    <div className={`min-h-dvh grid gap-4 p-4 ${hideChrome ? 'grid-cols-1' : 'grid-cols-1 lg:grid-cols-[280px_1fr]'}`}>
+    <div className={`min-h-dvh grid gap-4 p-4 ${hideChrome ? 'grid-cols-1' : 'grid-cols-1 2xl:grid-cols-[280px_1fr]'}`}>
       {!hideChrome && (
-        <aside className="glass hidden lg:block p-4">
+        <aside className="glass hidden 2xl:block p-4">
           <Sidebar />
         </aside> 
       )}

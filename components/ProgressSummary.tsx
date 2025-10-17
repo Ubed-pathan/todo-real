@@ -7,6 +7,9 @@ export function ProgressSummary() {
   const hydrated = useHydrated()
   const progressForDate = useTodoStore(s => s.progressForDate)
   const week = useTodoStore(s => s.progressForThisWeek())
+  const overall = useTodoStore(s => s.overallProgress())
+  const weekly = useTodoStore(s => s.weeklySummary())
+  const monthly = useTodoStore(s => s.monthlySummary())
   const today = useMemo(() => (hydrated ? progressForDate(new Date()) : { completed: 0, total: 0, percent: 0 }), [hydrated, progressForDate])
   const weekAvg = hydrated ? Math.round(week.values.reduce((a, b) => a + b, 0) / (week.values.length || 1)) : 0
 
@@ -22,12 +25,20 @@ export function ProgressSummary() {
   }
 
   return (
+    <>
     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
       <Stat label="Today" value={`${today.percent}%`} sub={`${today.completed}/${today.total} done`} />
       <Stat label="Week Avg" value={`${weekAvg}%`} sub={`7-day average`} />
-      <Stat label="Completed" value={`${week.completedCounts.reduce((a,b)=>a+b,0)}`} sub={`this week`} />
-      <Stat label="Total" value={`${week.totalCounts.reduce((a,b)=>a+b,0)}`} sub={`this week`} />
+      <Stat label="Completed" value={`${weekly.completedThisWeek}`} sub={`this week`} />
+      <Stat label="Total" value={`${overall.total}`} sub={`all todos`} />
     </div>
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3">
+      <Stat label="All-time Done" value={`${overall.completed}`} sub={`overall`} />
+      <Stat label="All-time %" value={`${overall.percent}%`} sub={`overall`} />
+      <Stat label="This Month" value={`${monthly.completedThisMonth}`} sub={`completed`} />
+      <Stat label="Created Month" value={`${monthly.createdThisMonth}`} sub={`created`} />
+    </div>
+    </>
   )
 }
 
